@@ -252,10 +252,10 @@ export default function NoteDetailPage() {
                         </p>
                     </div>
 
-                    {/* Video Section */}
-                    {note.video_url && (
+                    {/* Video Section (Mock Preview) */}
+                    {(note.video_url || true) && (
                         <div className="mt-16 mb-16 px-6">
-                            <VideoSection videoUrl={note.video_url} />
+                            <VideoSection videoUrl={note.video_url || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"} />
                         </div>
                     )}
 

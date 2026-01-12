@@ -31,7 +31,7 @@ export function Navbar({ showTabs = true }: NavbarProps) {
                     <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
                         <Link href="/browse" className="hover:text-white transition-colors">Marketplace</Link>
                         <Link href="#how-it-works" className="hover:text-white transition-colors">How it works</Link>
-                        <Link href="#" className="hover:text-white transition-colors">Pricing</Link>
+                        <Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link>
                     </div>
                 )}
 
