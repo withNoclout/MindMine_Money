@@ -21,9 +21,9 @@ export default function LandingPage() {
                 <a href="#" class="highlighter-hover transition-colors hover:text-white">How it works</a>
                 <a href="#" class="highlighter-hover transition-colors hover:text-white">Pricing</a>
             </div>
-            <button class="text-sm font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-zinc-200 transition-colors">
+            <a href="/login" class="text-sm font-medium bg-white text-black px-4 py-2 rounded-full hover:bg-zinc-200 transition-colors">
                 Login
-            </button>
+            </a>
         </div>
     </nav>
 
@@ -227,9 +227,9 @@ export default function LandingPage() {
                 <span class="text-zinc-600">Start digging.</span>
             </h2>
             <div class="flex justify-center">
-                <button class="px-8 py-3 bg-white text-black rounded-full font-semibold text-sm transition-transform hover:scale-105">
+                <a href="/login" class="px-8 py-3 bg-white text-black rounded-full font-semibold text-sm transition-transform hover:scale-105">
                     Create Student Account
-                </button>
+                </a>
             </div>
             <div class="mt-12 flex justify-center gap-8 text-xs text-zinc-600 font-medium tracking-wide uppercase">
                 <a href="#" class="hover:text-zinc-400 transition-colors">Privacy</a>
