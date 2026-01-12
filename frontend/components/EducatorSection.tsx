@@ -125,7 +125,7 @@ export default function EducatorSection() {
         </motion.div>
 
         {/* Benefits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-12 md:mb-16">
           {benefits.map((benefit, index) => (
             <motion.div
               key={index}
@@ -134,13 +134,13 @@ export default function EducatorSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: benefit.delay }}
               whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)' }}
-              className="bg-white/80 backdrop-blur-sm border border-gray-200/50 p-8 rounded-xl hover:bg-white/90 transition-colors duration-300"
+              className="bg-white/80 backdrop-blur-sm border border-gray-200/50 p-4 sm:p-5 md:p-6 lg:p-8 rounded-xl hover:bg-white/90 transition-colors duration-300 h-full"
             >
               <div className="flex items-start gap-4">
                 {/* Icon */}
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-black text-white flex items-center justify-center rounded-lg">
-                    <benefit.icon className="w-6 h-6" strokeWidth={2} />
+                  <div className="w-12 h-12 bg-black text-white flex items-center justify-center rounded-lg flex-shrink-0">
+                    <benefit.icon className="w-5 h-5" strokeWidth={2} />
                   </div>
                 </div>
 
@@ -200,7 +200,7 @@ export default function EducatorSection() {
             What Our Educators Say
           </motion.h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
@@ -209,28 +209,28 @@ export default function EducatorSection() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 whileHover={{ y: -4, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.08)' }}
-                className="bg-white/80 backdrop-blur-sm border border-gray-200/50 p-6 rounded-lg flex flex-col"
+                className="bg-white/80 backdrop-blur-sm border border-gray-200/50 p-4 sm:p-5 md:p-6 rounded-lg flex flex-col h-full"
               >
                 {/* Stars */}
-                <div className="flex gap-1 mb-4">
+                <div className="flex gap-1 mb-3">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
 
                 {/* Quote */}
-                <p className="text-gray-700 text-sm mb-4 flex-grow">"{testimonial.quote}"</p>
+                <p className="text-gray-700 text-xs sm:text-sm mb-4 flex-grow leading-relaxed line-clamp-3">"{testimonial.quote}"</p>
 
                 {/* Author */}
-                <div className="flex items-center gap-3 pt-4 border-t border-gray-200/50">
+                <div className="flex items-center gap-2 pt-4 border-t border-gray-200/50">
                   <img
                     src={testimonial.avatar}
                     alt={testimonial.name}
-                    className="w-10 h-10 rounded-full"
+                    className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                   />
-                  <div>
-                    <div className="font-semibold text-sm text-black">{testimonial.name}</div>
-                    <div className="text-xs text-gray-600">{testimonial.role}</div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-semibold text-xs sm:text-sm text-black truncate">{testimonial.name}</div>
+                    <div className="text-xs text-gray-600 truncate">{testimonial.role}</div>
                   </div>
                 </div>
               </motion.div>

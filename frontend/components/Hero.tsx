@@ -9,7 +9,7 @@ export default function Hero() {
       {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-black/5 via-transparent to-transparent pointer-events-none" />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 lg:py-20 relative z-10">
         <div className="text-center">
           {/* Main headline */}
           <motion.div
@@ -18,7 +18,7 @@ export default function Hero() {
             transition={{ duration: 0.6, ease: "easeOut", delay: 0.3 }}
             className="mb-8"
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-black leading-[1.1] mb-4">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-black leading-[1.1] mb-4">
               Transform Education with
               <br />
               <span className="text-gray-600">AI-Powered Content Valuation</span>
@@ -44,17 +44,17 @@ export default function Hero() {
           >
             <motion.a
               href="#student"
-              className="group flex items-center justify-center gap-2 px-8 py-4 text-base font-semibold bg-black text-white w-full sm:w-auto rounded"
+              className="group flex items-center justify-center gap-2 px-4 py-2 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold bg-black text-white w-full sm:w-auto rounded"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
             >
               Start Learning
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </motion.a>
             <motion.a
               href="#educator"
-              className="px-8 py-4 text-base font-semibold text-black border-2 border-black w-full sm:w-auto rounded"
+              className="px-4 py-2 sm:px-8 sm:py-4 text-sm sm:text-base font-semibold text-black border-2 border-black w-full sm:w-auto rounded"
               whileHover={{ scale: 1.02, backgroundColor: "rgba(0, 0, 0, 0.05)" }}
               whileTap={{ scale: 0.98 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
