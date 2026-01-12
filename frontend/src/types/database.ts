@@ -18,6 +18,7 @@ export interface Note {
     price: number;
     file_url: string;
     thumbnail_url: string | null;
+    video_url?: string | null;
     quality_score: number;
     seller_id: string;
     status: 'pending' | 'approved' | 'rejected';
@@ -45,4 +46,5 @@ export interface NoteUploadData {
     course_code?: string;
     price: number;
     file: File;
+    videoFile?: File | null;
 }

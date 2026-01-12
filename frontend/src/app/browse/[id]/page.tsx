@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Note, Purchase } from "@/types/database";
 import { FileText, User, Star, Download, ShoppingCart, ArrowLeft, Loader2 } from "lucide-react";
 import { PdfPreview } from "@/components/ui/PdfPreview";
+import { VideoSection } from "@/components/ui/VideoSection";
 import Link from "next/link";
 import Script from "next/script";
 
@@ -241,13 +242,22 @@ export default function NoteDetailPage() {
                         )}
                     </div>
 
-                    {/* Description Section (Below Viewer) */}
+                    {/* Description Section */}
+
+                    {/* Description Section */}
                     <div className="max-w-3xl mx-auto px-6 mt-16">
                         <h3 className="text-xl font-semibold text-white mb-4">About this note</h3>
                         <p className="text-zinc-400 leading-relaxed text-lg">
                             {note.description || "No description provided."}
                         </p>
                     </div>
+
+                    {/* Video Section */}
+                    {note.video_url && (
+                        <div className="mt-16 mb-16 px-6">
+                            <VideoSection videoUrl={note.video_url} />
+                        </div>
+                    )}
 
                 </main>
             </div>

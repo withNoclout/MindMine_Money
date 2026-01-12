@@ -68,6 +68,13 @@ export async function createNote(data: NoteUploadData, userId: string): Promise<
     // First upload the file
     const fileUrl = await uploadNoteFile(data.file, userId);
 
+    // Upload video if present
+    let videoUrl = null;
+    if (data.videoFile) {
+        // Reuse uploadNoteFile logic but could distinguish path if needed
+        videoUrl = await uploadNoteFile(data.videoFile, userId);
+    }
+
     // Create note record
     const { data: note, error } = await supabase
         .from('notes')
@@ -77,6 +84,7 @@ export async function createNote(data: NoteUploadData, userId: string): Promise<
             course_code: data.course_code || null,
             price: data.price,
             file_url: fileUrl,
+            video_url: videoUrl,
             seller_id: userId,
             status: 'approved', // Auto-approve for now
             quality_score: Math.floor(Math.random() * 20) + 80 // Mock score: 80-100

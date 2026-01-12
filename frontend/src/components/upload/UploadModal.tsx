@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { X, Upload, FileCheck, Loader2 } from "lucide-react";
+import { X, Upload, FileCheck, Loader2, Video } from "lucide-react";
 import { createNote } from "@/lib/supabase/notes";
 import { createClient } from "@/lib/supabase/client";
 
@@ -13,7 +13,9 @@ interface UploadModalProps {
 
 export function UploadModal({ isOpen, onClose, onSuccess }: UploadModalProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const videoInputRef = useRef<HTMLInputElement>(null);
     const [file, setFile] = useState<File | null>(null);
+    const [videoFile, setVideoFile] = useState<File | null>(null);
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [courseCode, setCourseCode] = useState("");
@@ -33,6 +35,22 @@ export function UploadModal({ isOpen, onClose, onSuccess }: UploadModalProps) {
                 return;
             }
             setFile(selectedFile);
+            setError("");
+        }
+    };
+
+    const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files?.[0];
+        if (selectedFile) {
+            if (!selectedFile.type.startsWith('video/')) {
+                setError("Please upload a valid video file");
+                return;
+            }
+            if (selectedFile.size > 50 * 1024 * 1024) { // 50MB limit
+                setError("Video file too large (max 50MB)");
+                return;
+            }
+            setVideoFile(selectedFile);
             setError("");
         }
     };
@@ -81,11 +99,13 @@ export function UploadModal({ isOpen, onClose, onSuccess }: UploadModalProps) {
                 description,
                 course_code: courseCode,
                 price: priceNum,
-                file
+                file,
+                videoFile
             }, user.id);
 
             // Reset form
             setFile(null);
+            setVideoFile(null);
             setTitle("");
             setDescription("");
             setCourseCode("");
@@ -130,8 +150,8 @@ export function UploadModal({ isOpen, onClose, onSuccess }: UploadModalProps) {
                         onDragOver={(e) => e.preventDefault()}
                         onClick={() => fileInputRef.current?.click()}
                         className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${file
-                                ? "border-green-500/50 bg-green-500/5"
-                                : "border-white/10 hover:border-white/20 hover:bg-white/5"
+                            ? "border-green-500/50 bg-green-500/5"
+                            : "border-white/10 hover:border-white/20 hover:bg-white/5"
                             }`}
                     >
                         <input
@@ -157,6 +177,45 @@ export function UploadModal({ isOpen, onClose, onSuccess }: UploadModalProps) {
                                 <p className="text-zinc-400 text-sm">Drop your file here or click to browse</p>
                                 <p className="text-zinc-600 text-xs mt-1">PDF, JPG, PNG supported</p>
                             </>
+                        )}
+                    </div>
+
+                    {/* Video Upload (Optional) */}
+                    <div
+                        onClick={() => videoInputRef.current?.click()}
+                        className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${videoFile
+                            ? "border-purple-500/50 bg-purple-500/5"
+                            : "border-white/10 hover:border-white/20 hover:bg-white/5"
+                            }`}
+                    >
+                        <input
+                            ref={videoInputRef}
+                            type="file"
+                            accept="video/mp4,video/webm"
+                            onChange={handleVideoChange}
+                            className="hidden"
+                        />
+                        {videoFile ? (
+                            <div className="flex items-center justify-center gap-3">
+                                <Video className="w-8 h-8 text-purple-400" />
+                                <div className="text-left">
+                                    <p className="text-white font-medium">{videoFile.name}</p>
+                                    <p className="text-zinc-500 text-sm">
+                                        {(videoFile.size / 1024 / 1024).toFixed(2)} MB
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); setVideoFile(null); }}
+                                    className="p-1 hover:bg-white/10 rounded-full ml-2"
+                                >
+                                    <X className="w-4 h-4 text-zinc-400" />
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-center gap-3 text-zinc-400">
+                                <Video className="w-5 h-5" />
+                                <span className="text-sm">Add Preview Video (Optional)</span>
+                            </div>
                         )}
                     </div>
 
