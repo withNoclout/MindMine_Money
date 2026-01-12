@@ -160,3 +160,151 @@ html {
 .grid-animate {
   animation: gridFadeIn 1s ease-out forwards;
 }
+/* Micro-interaction animations for B3 */
+
+/* Button hover ripple effect */
+@keyframes buttonRipple {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.3);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+.button-ripple:hover {
+  animation: buttonRipple 0.6s ease-out;
+}
+
+/* Card hover lift effect */
+@keyframes cardLift {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+.card-hover:hover {
+  animation: cardLift 0.3s ease-out forwards;
+}
+
+/* Scroll reveal fade-in */
+@keyframes scrollReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal {
+  animation: scrollReveal 0.6s ease-out forwards;
+}
+
+/* Staggered children animation */
+@keyframes staggerChild {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-child {
+  animation: staggerChild 0.4s ease-out;
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+
+/* Focus ring for accessibility - Enhanced for B3 */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus {
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-gray-900);
+  border-radius: 0.375rem;
+}
+
+.focus-visible-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-gray-900);
+  border-radius: 0.375rem;
+}
+
+/* Button focus state */
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-gray-900);
+  border-radius: 0.375rem;
+}
+
+/* Link focus state */
+a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-gray-900);
+  border-radius: 0.375rem;
+}
+
+/* Link underline animation */
+@keyframes underlineExpand {
+  from {
+    width: 0%;
+    left: 0;
+  }
+  to {
+    width: 100%;
+    left: 0;
+  }
+}
+
+a.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+a.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: currentColor;
+  transition: width 0.3s ease-out;
+}
+
+a.link-underline:hover::after {
+  width: 100%;
+}
+
+/* Disable animations for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
