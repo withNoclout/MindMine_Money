@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { BrainCircuit, Star, User } from "lucide-react";
+import { PdfThumbnail } from "@/components/ui/PdfThumbnail";
 
 interface NoteCardProps {
     id: string;
@@ -10,6 +11,7 @@ interface NoteCardProps {
     price: number;
     qualityScore: number;
     thumbnailUrl?: string;
+    fileUrl?: string; // Add fileUrl to props
     seller: {
         name: string;
         avatar?: string;
@@ -23,6 +25,7 @@ export function NoteCard({
     price,
     qualityScore,
     thumbnailUrl,
+    fileUrl,
     seller,
 }: NoteCardProps) {
     return (
@@ -35,6 +38,8 @@ export function NoteCard({
                         alt={title}
                         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
+                ) : fileUrl && fileUrl.toLowerCase().endsWith('.pdf') ? (
+                    <PdfThumbnail fileUrl={fileUrl} />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-900">
                         <div className="text-center">

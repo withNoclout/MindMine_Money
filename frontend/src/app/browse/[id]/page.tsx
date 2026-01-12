@@ -7,6 +7,7 @@ import { fetchNoteById } from "@/lib/supabase/notes";
 import { createClient } from "@/lib/supabase/client";
 import { Note, Purchase } from "@/types/database";
 import { FileText, User, Star, Download, ShoppingCart, ArrowLeft, Loader2 } from "lucide-react";
+import { PdfPreview } from "@/components/ui/PdfPreview";
 import Link from "next/link";
 import Script from "next/script";
 
@@ -121,13 +122,12 @@ export default function NoteDetailPage() {
         <>
             <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
 
-            <div className="min-h-screen bg-[#09090b]">
+            <div className="min-h-screen bg-[#09090b] overflow-x-hidden">
                 <div className="fixed inset-0 bg-grid-pattern z-0 pointer-events-none" />
                 <Navbar />
 
-                <main className="relative z-10 pt-24 pb-16 px-6">
-                    <div className="max-w-4xl mx-auto">
-
+                <main className="relative z-10 pt-24 pb-16">
+                    <div className="max-w-7xl mx-auto px-6 mb-12">
                         {/* Back Button */}
                         <Link
                             href="/browse"
@@ -137,15 +137,99 @@ export default function NoteDetailPage() {
                             Back to Marketplace
                         </Link>
 
-                        <div className="grid md:grid-cols-2 gap-8">
+                        {/* Top Header Section */}
+                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-8 border-b border-white/5">
+                            {/* Left: Metadata */}
+                            <div className="space-y-4 max-w-2xl">
+                                <div>
+                                    {note.course_code && (
+                                        <span className="inline-block px-3 py-1 rounded-full bg-zinc-800 text-green-400 text-xs font-medium mb-3 border border-white/5">
+                                            {note.course_code}
+                                        </span>
+                                    )}
+                                    <h1 className="text-4xl font-bold text-white tracking-tight">{note.title}</h1>
+                                </div>
 
-                            {/* Preview */}
-                            <div className="aspect-[3/4] bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center">
+                                <div className="flex items-center gap-6">
+                                    <div className="flex items-center gap-2">
+                                        {note.seller?.avatar_url ? (
+                                            <img src={note.seller.avatar_url} alt="" className="w-6 h-6 rounded-full object-cover" />
+                                        ) : (
+                                            <div className="w-6 h-6 rounded-full bg-zinc-800 flex items-center justify-center">
+                                                <User className="w-3 h-3 text-zinc-400" />
+                                            </div>
+                                        )}
+                                        <span className="text-zinc-400 text-sm">by <span className="text-white font-medium">{note.seller?.display_name || 'Anonymous'}</span></span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                                        <span className="text-white text-sm font-medium">{note.quality_score}%</span>
+                                        <span className="text-zinc-500 text-sm">Quality</span>
+                                    </div>
+                                    <div className="text-zinc-500 text-sm">
+                                        {note.downloads} downloads
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Right: Actions */}
+                            <div className="flex items-center gap-6 bg-zinc-900/50 p-6 rounded-2xl border border-white/5 backdrop-blur-sm">
+                                <div>
+                                    <p className="text-zinc-400 text-xs uppercase tracking-wider mb-1">Price</p>
+                                    <p className="text-3xl font-bold text-white">${note.price.toFixed(2)}</p>
+                                </div>
+                                <div className="h-10 w-px bg-white/10" />
+
+                                {isOwner ? (
+                                    <div className="px-6 py-3 bg-zinc-800 rounded-xl text-zinc-400 font-medium">
+                                        You own this note
+                                    </div>
+                                ) : isPurchased ? (
+                                    <button
+                                        onClick={handleDownload}
+                                        className="px-8 py-3 bg-green-500 text-black font-bold rounded-xl hover:bg-green-400 transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+                                    >
+                                        <Download className="w-5 h-5" />
+                                        Download PDF
+                                    </button>
+                                ) : currentUser ? (
+                                    <button
+                                        onClick={handlePurchase}
+                                        disabled={isPurchasing}
+                                        className="px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center gap-2"
+                                    >
+                                        {isPurchasing ? (
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                        ) : (
+                                            <>
+                                                <ShoppingCart className="w-5 h-5" />
+                                                Buy Now
+                                            </>
+                                        )}
+                                    </button>
+                                ) : (
+                                    <Link
+                                        href="/login"
+                                        className="px-8 py-3 bg-white text-black font-bold rounded-xl hover:bg-zinc-200 transition-all hover:scale-105 active:scale-95"
+                                    >
+                                        Login to Buy
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Immersive Viewer */}
+                    <div className="w-full">
+                        {note.file_url?.toLowerCase().endsWith('.pdf') ? (
+                            <PdfPreview fileUrl={note.file_url} />
+                        ) : (
+                            <div className="max-w-4xl mx-auto aspect-[3/4] bg-zinc-900 rounded-2xl border border-white/10 flex items-center justify-center overflow-hidden">
                                 {note.thumbnail_url ? (
                                     <img
                                         src={note.thumbnail_url}
                                         alt={note.title}
-                                        className="w-full h-full object-cover rounded-2xl"
+                                        className="w-full h-full object-cover"
                                     />
                                 ) : (
                                     <div className="text-center">
@@ -154,90 +238,17 @@ export default function NoteDetailPage() {
                                     </div>
                                 )}
                             </div>
-
-                            {/* Details */}
-                            <div className="space-y-6">
-                                {/* Title & Course */}
-                                <div>
-                                    {note.course_code && (
-                                        <span className="text-green-400 text-sm font-medium">{note.course_code}</span>
-                                    )}
-                                    <h1 className="text-3xl font-semibold text-white mt-1">{note.title}</h1>
-                                </div>
-
-                                {/* Quality Score */}
-                                <div className="flex items-center gap-4">
-                                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                                        <span className="text-yellow-400 text-sm font-medium">{note.quality_score}% Quality</span>
-                                    </div>
-                                    <span className="text-zinc-500 text-sm">{note.downloads} downloads</span>
-                                </div>
-
-                                {/* Description */}
-                                {note.description && (
-                                    <p className="text-zinc-400 leading-relaxed">{note.description}</p>
-                                )}
-
-                                {/* Seller */}
-                                <div className="flex items-center gap-3 p-4 rounded-xl bg-zinc-900/50 border border-white/5">
-                                    <div className="w-10 h-10 rounded-full bg-zinc-700 flex items-center justify-center">
-                                        {note.seller?.avatar_url ? (
-                                            <img src={note.seller.avatar_url} alt="" className="w-full h-full rounded-full object-cover" />
-                                        ) : (
-                                            <User className="w-5 h-5 text-zinc-400" />
-                                        )}
-                                    </div>
-                                    <div>
-                                        <p className="text-white font-medium">{note.seller?.display_name || 'Anonymous'}</p>
-                                        <p className="text-zinc-500 text-sm">Seller</p>
-                                    </div>
-                                </div>
-
-                                {/* Price & Actions */}
-                                <div className="p-6 rounded-2xl bg-zinc-900/50 border border-white/10">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <span className="text-zinc-400">Price</span>
-                                        <span className="text-3xl font-bold text-white">${note.price.toFixed(2)}</span>
-                                    </div>
-
-                                    {isOwner ? (
-                                        <p className="text-zinc-500 text-center text-sm">This is your note</p>
-                                    ) : isPurchased ? (
-                                        <button
-                                            onClick={handleDownload}
-                                            className="w-full py-3 bg-green-500 text-black font-semibold rounded-xl hover:bg-green-400 transition-colors flex items-center justify-center gap-2"
-                                        >
-                                            <Download className="w-5 h-5" />
-                                            Download Notes
-                                        </button>
-                                    ) : currentUser ? (
-                                        <button
-                                            onClick={handlePurchase}
-                                            disabled={isPurchasing}
-                                            className="w-full py-3 bg-green-500 text-black font-semibold rounded-xl hover:bg-green-400 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-                                        >
-                                            {isPurchasing ? (
-                                                <Loader2 className="w-5 h-5 animate-spin" />
-                                            ) : (
-                                                <>
-                                                    <ShoppingCart className="w-5 h-5" />
-                                                    Buy Now
-                                                </>
-                                            )}
-                                        </button>
-                                    ) : (
-                                        <Link
-                                            href="/login"
-                                            className="w-full py-3 bg-white text-black font-semibold rounded-xl hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2"
-                                        >
-                                            Login to Purchase
-                                        </Link>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                        )}
                     </div>
+
+                    {/* Description Section (Below Viewer) */}
+                    <div className="max-w-3xl mx-auto px-6 mt-16">
+                        <h3 className="text-xl font-semibold text-white mb-4">About this note</h3>
+                        <p className="text-zinc-400 leading-relaxed text-lg">
+                            {note.description || "No description provided."}
+                        </p>
+                    </div>
+
                 </main>
             </div>
         </>

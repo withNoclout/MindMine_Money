@@ -128,6 +128,7 @@ export default function BrowsePage() {
                                                 price={note.price}
                                                 qualityScore={note.quality_score}
                                                 thumbnailUrl={note.thumbnail_url || ''}
+                                                fileUrl={note.file_url || ''}
                                                 seller={{
                                                     name: note.seller?.display_name || 'Anonymous',
                                                     avatar: note.seller?.avatar_url || ''
