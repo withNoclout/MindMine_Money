@@ -1,0 +1,184 @@
+/* Base Settings */
+:root {
+  --bg-color: #09090b;
+  --text-color: #fafafa;
+  --accent-glow: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+.font-hand {
+  font-family: 'Patrick Hand', cursive;
+}
+
+/* Grid Background */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+}
+
+/* Highlighter Effect */
+.highlighter-hover {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+  z-index: 1;
+}
+
+.highlighter-hover::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -2px;
+  right: -2px;
+  height: 8px;
+  background-color: #fde047;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: -1;
+  transform: skew(-10deg);
+}
+
+.highlighter-hover:hover::before {
+  opacity: 0.8;
+  height: 60%;
+}
+
+.highlighter-hover:hover {
+  color: #09090b;
+}
+
+/* 3D Card Animation */
+.perspective-container {
+  perspective: 1200px;
+}
+
+.ipad-card {
+  transform-style: preserve-3d;
+  transform: rotateY(-12deg) rotateX(8deg);
+  transition: transform 0.5s ease-out;
+  box-shadow:
+    20px 20px 60px rgba(0, 0, 0, 0.5),
+    -1px -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.ipad-card:hover {
+  transform: rotateY(-8deg) rotateX(4deg) translateY(-10px);
+}
+
+/* Scanning Laser */
+.scanner-beam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #22d3ee;
+  box-shadow: 0 0 15px #22d3ee, 0 0 30px #22d3ee;
+  animation: scan 3s ease-in-out infinite;
+  z-index: 20;
+  opacity: 0.8;
+}
+
+@keyframes scan {
+
+  0%,
+  100% {
+    top: 10%;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  50% {
+    top: 90%;
+  }
+
+  90% {
+    opacity: 1;
+  }
+}
+
+/* Typewriter Cursor */
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Float Animation */
+.float-anim {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.float-fast {
+  animation: float 4s ease-in-out infinite;
+}
+
+.float-slow {
+  animation: float 7s ease-in-out infinite;
+}
+
+.edu-glow {
+  box-shadow: 0 0 100px rgba(59, 130, 246, 0.15);
+}
+
+.student-glow {
+  box-shadow: 0 0 100px rgba(34, 197, 94, 0.15);
+}
+
+/* Sticker Style */
+.sticker {
+  background: white;
+  color: #09090b;
+  border: 4px solid white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transform: rotate(var(--rotation));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sticker:hover {
+  transform: scale(1.1) rotate(0deg) !important;
+  z-index: 10;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 4px;
+}

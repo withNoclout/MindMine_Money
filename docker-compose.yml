@@ -1,0 +1,24 @@
+services:
+  frontend:
+    container_name: mindmine-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      # Sync local changes to container
+      - ./frontend:/app
+      # Keep container's node_modules separate from host
+      - /app/node_modules
+      # Persist Next.js cache for speed
+      - .next:/app/.next
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      # Polling ensures hot-reload works reliably on Windows
+      - WATCHPACK_POLLING=true
+    restart: always
+
+# Define volumes if needed (none global for now)
+volumes:
+  .next:
