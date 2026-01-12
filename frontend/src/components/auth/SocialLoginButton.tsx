@@ -18,6 +18,9 @@ export function SocialLoginButton({ provider, className = "" }: SocialLoginButto
             provider,
             options: {
                 redirectTo: `${window.location.origin}/auth/callback?next=/`,
+                queryParams: {
+                    prompt: 'select_account',
+                },
             },
         });
 

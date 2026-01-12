@@ -19,6 +19,9 @@ export default function LoginPage() {
             provider,
             options: {
                 redirectTo: `${window.location.origin}/auth/callback?next=/`,
+                queryParams: {
+                    prompt: 'select_account', // Force account picker on each login
+                },
             },
         });
 
@@ -290,7 +293,7 @@ export default function LoginPage() {
                     <form class="space-y-4">
                         <!-- OAuth Buttons -->
                         <div class="flex gap-4">
-                            <button type="button" onclick="handleOAuthLogin('apple')" class="oauth-btn flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 flex justify-center items-center gap-2 text-sm font-medium">
+                            <button type="button" disabled class="oauth-btn flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 flex justify-center items-center gap-2 text-sm font-medium opacity-40 cursor-not-allowed" title="Apple Sign In coming soon">
                                 <span class="iconify" data-icon="lucide:apple" data-width="16"></span>
                                 Apple
                             </button>
@@ -350,7 +353,7 @@ export default function LoginPage() {
                     <form class="space-y-4">
                         <!-- OAuth Buttons -->
                         <div class="flex gap-4">
-                            <button type="button" onclick="handleOAuthLogin('apple')" class="oauth-btn flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 flex justify-center items-center gap-2 text-sm font-medium">
+                            <button type="button" disabled class="oauth-btn flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 flex justify-center items-center gap-2 text-sm font-medium opacity-40 cursor-not-allowed" title="Apple Sign In coming soon">
                                 <span class="iconify" data-icon="lucide:apple" data-width="16"></span>
                                 Apple
                             </button>
