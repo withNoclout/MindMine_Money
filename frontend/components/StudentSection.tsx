@@ -1,7 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { CheckCircle, BookOpen, Wallet, ArrowRight } from 'lucide-react';
+import { CheckCircle, BookOpen, Wallet, ArrowRight, Star } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useInView } from 'framer-motion';
 
 const benefits = [
   {
@@ -29,6 +31,78 @@ const benefits = [
     delay: 0.5,
   },
 ];
+
+const studentTestimonials = [
+  {
+    name: 'Lisa Wong',
+    role: 'Grade 11 Student',
+    quote: 'The AI-vetted content is amazing. I know the material is actually good before I spend credits.',
+    rating: 5,
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa',
+  },
+  {
+    name: 'Marcus Johnson',
+    role: 'University Student',
+    quote: 'PromptPay support is perfect for Thai students like me. Makes top-ups super easy.',
+    rating: 5,
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus',
+  },
+  {
+    name: 'Nida Sukara',
+    role: 'Grade 10 Student',
+    quote: 'Found exactly what I needed for my math class. The credit system is so flexible.',
+    rating: 5,
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Nida',
+  },
+  {
+    name: 'Amara Osei',
+    role: 'High School Learner',
+    quote: 'Quality content at affordable prices. This platform actually respects students.',
+    rating: 5,
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Amara',
+  },
+  {
+    name: 'Kai Tanaka',
+    role: 'University Sophomore',
+    quote: 'Coverage from Grade 1 to University is incredible. Everything is in one place.',
+    rating: 5,
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kai',
+  },
+  {
+    name: 'Sophia Martinez',
+    role: 'Grade 12 Student',
+    quote: 'I trust the content because I know AI has already verified it. No more wasting credits.',
+    rating: 5,
+    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia',
+  },
+];
+
+// Counter Animation Component
+function CounterAnimation({ value, suffix = '' }: { value: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref as any, { once: true, margin: '-100px' });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    const increment = value / 30;
+    const timer = setInterval(() => {
+      setCount((prev) => {
+        const next = prev + increment;
+        return next >= value ? value : next;
+      });
+    }, 20);
+
+    return () => clearInterval(timer);
+  }, [isInView, value]);
+
+  return (
+    <span ref={ref}>
+      {Math.round(count).toLocaleString()}{suffix}
+    </span>
+  );
+}
 
 export default function StudentSection() {
   return (
@@ -59,12 +133,13 @@ export default function StudentSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: benefit.delay }}
-              className="bg-gray-50 border-2 border-gray-200 p-8 hover:border-black transition-colors duration-300"
+              whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08)' }}
+              className="bg-white/80 backdrop-blur-sm border border-gray-200/50 p-8 rounded-xl hover:bg-white/90 transition-colors duration-300"
             >
               <div className="flex items-start gap-4">
                 {/* Icon */}
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-black text-white flex items-center justify-center">
+                  <div className="w-12 h-12 bg-black text-white flex items-center justify-center rounded-lg">
                     <benefit.icon className="w-6 h-6" strokeWidth={2} />
                   </div>
                 </div>
@@ -83,7 +158,7 @@ export default function StudentSection() {
           ))}
         </div>
 
-        {/* Features Highlight */}
+        {/* Features Highlight with Counter Animations */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -91,19 +166,73 @@ export default function StudentSection() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16"
         >
-          <div className="text-center p-6">
-            <div className="text-4xl font-bold text-black mb-2">10,000+</div>
+          <div className="bg-white/80 backdrop-blur-sm border border-gray-200/50 text-center p-8 rounded-xl">
+            <div className="text-4xl font-bold text-black mb-2">
+              <CounterAnimation value={10000} suffix="+" />
+            </div>
             <div className="text-sm text-gray-600">Content Pieces</div>
           </div>
-          <div className="text-center p-6">
-            <div className="text-4xl font-bold text-black mb-2">AI-Powered</div>
-            <div className="text-sm text-gray-600">Quality Scoring</div>
+          <div className="bg-white/80 backdrop-blur-sm border border-gray-200/50 text-center p-8 rounded-xl">
+            <div className="text-4xl font-bold text-black mb-2">
+              <CounterAnimation value={100} suffix="%" />
+            </div>
+            <div className="text-sm text-gray-600">AI-Powered Quality</div>
           </div>
-          <div className="text-center p-6">
+          <div className="bg-white/80 backdrop-blur-sm border border-gray-200/50 text-center p-8 rounded-xl">
             <div className="text-4xl font-bold text-black mb-2">24/7</div>
             <div className="text-sm text-gray-600">Access Anytime</div>
           </div>
         </motion.div>
+
+        {/* Student Testimonials Section */}
+        <div className="mb-16">
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-3xl font-bold text-black text-center mb-12"
+          >
+            What Our Students Say
+          </motion.h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {studentTestimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -4, boxShadow: '0 15px 30px rgba(0, 0, 0, 0.08)' }}
+                className="bg-white/80 backdrop-blur-sm border border-gray-200/50 p-6 rounded-lg flex flex-col"
+              >
+                {/* Stars */}
+                <div className="flex gap-1 mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+
+                {/* Quote */}
+                <p className="text-gray-700 text-sm mb-4 flex-grow">"{testimonial.quote}"</p>
+
+                {/* Author */}
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-200/50">
+                  <img
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    className="w-10 h-10 rounded-full"
+                  />
+                  <div>
+                    <div className="font-semibold text-sm text-black">{testimonial.name}</div>
+                    <div className="text-xs text-gray-600">{testimonial.role}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
 
         {/* CTA */}
         <motion.div
