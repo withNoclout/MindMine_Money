@@ -16,6 +16,116 @@ body {
   font-family: 'Patrick Hand', cursive;
 }
 
+/* Hide Iconify placeholders until loaded - prevents flash */
+.iconify:not(svg) {
+  visibility: hidden;
+  width: 1em;
+  height: 1em;
+}
+
+/* Float animation */
+.float-anim {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Paper Flip Animation - for background cards */
+@keyframes paperFlip1 {
+
+  0%,
+  100% {
+    transform: translate(-45%, -55%) rotate(-6deg) rotateY(0deg) scale(1);
+    opacity: 0.4;
+  }
+
+  25% {
+    transform: translate(-48%, -52%) rotate(-3deg) rotateY(10deg) scale(1.02);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translate(-45%, -55%) rotate(-6deg) rotateY(0deg) scale(1);
+    opacity: 0.4;
+  }
+
+  75% {
+    transform: translate(-42%, -58%) rotate(-9deg) rotateY(-10deg) scale(0.98);
+    opacity: 0.35;
+  }
+}
+
+@keyframes paperFlip2 {
+
+  0%,
+  100% {
+    transform: translate(-55%, -45%) rotate(6deg) rotateY(0deg) scale(1);
+    opacity: 0.2;
+  }
+
+  25% {
+    transform: translate(-58%, -42%) rotate(9deg) rotateY(-10deg) scale(0.98);
+    opacity: 0.15;
+  }
+
+  50% {
+    transform: translate(-55%, -45%) rotate(6deg) rotateY(0deg) scale(1);
+    opacity: 0.2;
+  }
+
+  75% {
+    transform: translate(-52%, -48%) rotate(3deg) rotateY(10deg) scale(1.02);
+    opacity: 0.25;
+  }
+}
+
+.paper-flip-1 {
+  animation: paperFlip1 8s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.paper-flip-2 {
+  animation: paperFlip2 8s ease-in-out infinite;
+  animation-delay: 0.5s;
+  transform-style: preserve-3d;
+}
+
+/* Paper Flow Animation - swipe up and fly away */
+@keyframes paperExit {
+  0% {
+    transform: translateY(0) rotate(2deg) scale(1);
+    opacity: 1;
+  }
+
+  60% {
+    transform: translateY(-80px) rotate(-8deg) scale(0.95);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-200px) translateX(120px) rotate(-20deg) scale(0.7);
+    opacity: 0;
+  }
+}
+
+@keyframes paperEnter {
+  0% {
+    transform: translateY(80px) rotate(8deg) scale(0.9);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0) rotate(2deg) scale(1);
+    opacity: 1;
+  }
+}
+
+.paper-exit {
+  animation: paperExit 0.6s ease-out forwards;
+}
+
+.paper-enter {
+  animation: paperEnter 0.5s ease-out forwards;
+}
+
 /* Grid Background */
 .bg-grid-pattern {
   background-size: 40px 40px;
