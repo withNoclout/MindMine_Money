@@ -1,12 +1,37 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
     const containerRef = useRef<HTMLDivElement>(null);
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+
+    // OAuth Login Handler
+    const handleOAuthLogin = async (provider: 'google' | 'apple') => {
+        setIsLoading(true);
+        const supabase = createClient();
+
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider,
+            options: {
+                redirectTo: `${window.location.origin}/auth/callback?next=/`,
+            },
+        });
+
+        if (error) {
+            console.error(`OAuth error (${provider}):`, error.message);
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
+        // Expose OAuth handler to the injected HTML buttons
+        (window as any).handleOAuthLogin = handleOAuthLogin;
+
         // Define the toggleMode function on window for the onclick handlers
         (window as any).toggleMode = function () {
             const body = document.body;
@@ -38,7 +63,7 @@ export default function LoginPage() {
             }
         };
 
-        // Mock Login Handler
+        // Mock Login Handler (for email/password - to be replaced with real Supabase auth later)
         (window as any).handleLogin = function (buttonElement: HTMLButtonElement) {
             const form = buttonElement.closest('form');
             if (!form) return;
@@ -49,9 +74,19 @@ export default function LoginPage() {
             const email = emailInput?.value;
             const password = passwordInput?.value;
 
+            // Mock authentication - will be replaced with Supabase email auth
             if (email === "admin" && password === "admin") {
-                const isStudent = document.body.classList.contains('is-student-mode');
-                window.location.href = isStudent ? "/student/browse" : "/educator/dashboard";
+                const exitOverlay = document.getElementById('exit-overlay');
+                if (exitOverlay) {
+                    exitOverlay.style.display = 'flex';
+                    setTimeout(() => {
+                        exitOverlay.style.opacity = '1';
+                    }, 10);
+                }
+
+                setTimeout(() => {
+                    router.push("/");
+                }, 100);
             } else {
                 let errorEl = form.querySelector('.login-error') as HTMLParagraphElement;
                 if (!errorEl) {
@@ -70,8 +105,9 @@ export default function LoginPage() {
             document.body.classList.remove('is-student-mode');
             delete (window as any).toggleMode;
             delete (window as any).handleLogin;
+            delete (window as any).handleOAuthLogin;
         };
-    }, []);
+    }, [router]);
 
     return (
         <>
@@ -189,6 +225,18 @@ export default function LoginPage() {
         .student-glow {
             box-shadow: 0 0 100px rgba(34, 197, 94, 0.15);
         }
+
+        .oauth-btn {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .oauth-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .oauth-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
       `}</style>
 
             <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
@@ -200,6 +248,14 @@ export default function LoginPage() {
                 suppressHydrationWarning={true}
                 dangerouslySetInnerHTML={{
                     __html: `
+    <!-- Exit Overlay (Initially Hidden) -->
+    <div id="exit-overlay" style="display:none; opacity:0; position:fixed; inset:0; z-index:9999; background-color:#09090b; flex-direction:column; align-items:center; justify-content:center; transition:opacity 0.5s ease-out;">
+        <div class="flex items-center gap-3 animate-pulse">
+            <span class="iconify text-zinc-100" data-icon="lucide:brain-circuit" data-width="48"></span>
+            <span class="text-3xl font-bold tracking-tighter text-white">MIND MINE</span>
+        </div>
+    </div>
+
     <div class="mode-container bg-grid-pattern">
         
         <!-- Navigation (Absolute) -->
@@ -232,6 +288,23 @@ export default function LoginPage() {
                     </div>
 
                     <form class="space-y-4">
+                        <!-- OAuth Buttons -->
+                        <div class="flex gap-4">
+                            <button type="button" onclick="handleOAuthLogin('apple')" class="oauth-btn flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 flex justify-center items-center gap-2 text-sm font-medium">
+                                <span class="iconify" data-icon="lucide:apple" data-width="16"></span>
+                                Apple
+                            </button>
+                            <button type="button" onclick="handleOAuthLogin('google')" class="oauth-btn flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 flex justify-center items-center gap-2 text-sm font-medium">
+                                <span class="iconify" data-icon="lucide:mail" data-width="16"></span>
+                                Google
+                            </button>
+                        </div>
+                        
+                        <div class="relative py-2">
+                            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div>
+                            <div class="relative flex justify-center text-xs uppercase"><span class="bg-[#09090b] px-2 text-zinc-500">Or continue with email</span></div>
+                        </div>
+
                         <div class="input-group space-y-1">
                             <label class="text-xs font-medium text-zinc-400 ml-1">Academic Email</label>
                             <input type="email" placeholder="prof@university.edu" class="w-full px-4 py-3 rounded-xl text-sm placeholder:text-zinc-700">
@@ -275,12 +348,13 @@ export default function LoginPage() {
                     </div>
 
                     <form class="space-y-4">
+                        <!-- OAuth Buttons -->
                         <div class="flex gap-4">
-                            <button type="button" class="flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors flex justify-center items-center gap-2 text-sm font-medium">
+                            <button type="button" onclick="handleOAuthLogin('apple')" class="oauth-btn flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 flex justify-center items-center gap-2 text-sm font-medium">
                                 <span class="iconify" data-icon="lucide:apple" data-width="16"></span>
                                 Apple
                             </button>
-                            <button type="button" class="flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors flex justify-center items-center gap-2 text-sm font-medium">
+                            <button type="button" onclick="handleOAuthLogin('google')" class="oauth-btn flex-1 py-3 px-4 rounded-xl border border-white/10 bg-white/5 flex justify-center items-center gap-2 text-sm font-medium">
                                 <span class="iconify" data-icon="lucide:mail" data-width="16"></span>
                                 Google
                             </button>

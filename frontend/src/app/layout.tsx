@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   description: "The AI-powered marketplace where your neat handwriting pays for your coffee.",
 };
 
+import { PageLoader } from "@/components/ui/PageLoader";
+
 export default function RootLayout({
   children,
 }: {
@@ -20,6 +22,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Patrick+Hand&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased selection:bg-zinc-800 selection:text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
+        <PageLoader />
         {children}
       </body>
     </html>
