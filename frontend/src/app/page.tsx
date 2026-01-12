@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UserProfileButton } from "@/components/auth/UserProfileButton";
+import { Navbar } from "@/components/layout/Navbar";
 import Link from "next/link";
 import Script from "next/script";
 import {
-    BrainCircuit,
     ArrowRight,
     PlayCircle,
     Star,
@@ -16,7 +15,8 @@ import {
     Zap,
     UploadCloud,
     ScanLine,
-    Wallet
+    Wallet,
+    BrainCircuit
 } from "lucide-react";
 
 // Note subjects for cycling
@@ -91,20 +91,7 @@ export default function LandingPage() {
                 <div className="fixed inset-0 bg-grid-pattern z-0 pointer-events-none" />
 
                 {/* Navigation */}
-                <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/5 bg-[#09090b]/80">
-                    <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-                        <Link href="/" className="flex items-center gap-2">
-                            <BrainCircuit className="w-6 h-6 text-zinc-100" />
-                            <span className="text-lg font-semibold tracking-tighter text-white">MIND MINE</span>
-                        </Link>
-                        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
-                            <Link href="/browse" className="hover:text-white transition-colors">Marketplace</Link>
-                            <Link href="#how-it-works" className="hover:text-white transition-colors">How it works</Link>
-                            <Link href="#" className="hover:text-white transition-colors">Pricing</Link>
-                        </div>
-                        <UserProfileButton variant="dark" />
-                    </div>
-                </nav>
+                <Navbar showTabs={false} />
 
                 {/* Hero Section */}
                 <main className="relative z-10 pt-32 pb-20">

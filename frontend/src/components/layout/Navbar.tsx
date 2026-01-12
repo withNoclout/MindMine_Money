@@ -1,39 +1,42 @@
 "use client";
 
-import { Bell, Search, User } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { BrainCircuit } from "lucide-react";
+import { UserProfileButton } from "@/components/auth/UserProfileButton";
+import { TabNav } from "@/components/ui/TabNav";
 
-export function Navbar() {
+interface NavbarProps {
+    showTabs?: boolean;
+}
+
+export function Navbar({ showTabs = true }: NavbarProps) {
+    const pathname = usePathname();
+
+    // Don't show tabs on landing page
+    const isLanding = pathname === "/";
+    const displayTabs = showTabs && !isLanding;
+
     return (
-        <header className="h-16 fixed top-0 right-0 left-64 border-b border-white/10 glass-dark z-30 flex items-center justify-between px-8">
-            {/* Search Bar */}
-            <div className="flex items-center w-full max-w-md relative group">
-                <Search className="absolute left-3 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors" />
-                <input
-                    type="text"
-                    placeholder="Search for courses, topics, or educators..."
-                    className="w-full bg-black/20 border border-white/5 focus:border-primary/50 text-sm text-white rounded-full pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-gray-600"
-                />
-            </div>
+        <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/5 bg-[#09090b]/80">
+            <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+                <Link href="/" className="flex items-center gap-2 group">
+                    <BrainCircuit className="w-6 h-6 text-zinc-100 transition-transform group-hover:-rotate-12" />
+                    <span className="text-lg font-semibold tracking-tighter text-white">MIND MINE</span>
+                </Link>
 
-            {/* Actions */}
-            <div className="flex items-center gap-6">
-                <button className="relative text-gray-400 hover:text-white transition-colors">
-                    <Bell className="w-5 h-5" />
-                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-black"></span>
-                </button>
+                {displayTabs ? (
+                    <TabNav />
+                ) : (
+                    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
+                        <Link href="/browse" className="hover:text-white transition-colors">Marketplace</Link>
+                        <Link href="#how-it-works" className="hover:text-white transition-colors">How it works</Link>
+                        <Link href="#" className="hover:text-white transition-colors">Pricing</Link>
+                    </div>
+                )}
 
-                <div className="flex items-center gap-3 pl-6 border-l border-white/10">
-                    <div className="text-right hidden sm:block">
-                        <p className="text-sm font-medium text-white">Alex Student</p>
-                        <p className="text-xs text-gray-500">Student Account</p>
-                    </div>
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 p-[2px]">
-                        <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                            <User className="w-4 h-4 text-white" />
-                        </div>
-                    </div>
-                </div>
+                <UserProfileButton variant="dark" />
             </div>
-        </header>
+        </nav>
     );
 }

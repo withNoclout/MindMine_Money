@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { BrainCircuit, Star, User } from "lucide-react";
 
 interface NoteCardProps {
@@ -25,7 +26,7 @@ export function NoteCard({
     seller,
 }: NoteCardProps) {
     return (
-        <div className="group relative bg-zinc-900/50 border border-white/5 rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/10 hover:shadow-[0_0_60px_rgba(34,197,94,0.1)]">
+        <Link href={`/browse/${id}`} className="group relative bg-zinc-900/50 border border-white/5 rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/10 hover:shadow-[0_0_60px_rgba(34,197,94,0.1)] block">
             {/* Thumbnail */}
             <div className="relative aspect-[4/3] bg-zinc-800 overflow-hidden">
                 {thumbnailUrl ? (
@@ -88,6 +89,6 @@ export function NoteCard({
 
             {/* Hover Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-        </div>
+        </Link>
     );
 }
