@@ -92,44 +92,34 @@ export default function PricingPage() {
                         </motion.p>
 
                         {/* Toggle */}
-                        {/* Toggle */}
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.2 }}
-                            className="flex items-center justify-center mt-8"
+                            className="flex items-center justify-center gap-4 mt-8"
                         >
-                            <div className="relative flex bg-zinc-900/50 p-1 rounded-full border border-white/10 backdrop-blur-sm">
-                                <button
-                                    onClick={() => setIsAnnual(false)}
-                                    className="relative z-10 px-6 py-2 text-sm font-medium transition-colors duration-200 outline-none"
-                                >
-                                    <span className={!isAnnual ? "text-black" : "text-zinc-400"}>Monthly</span>
-                                </button>
-                                <button
-                                    onClick={() => setIsAnnual(true)}
-                                    className="relative z-10 px-6 py-2 text-sm font-medium transition-colors duration-200 outline-none"
-                                >
-                                    <div className="flex items-center gap-2">
-                                        <span className={isAnnual ? "text-black" : "text-zinc-400"}>Annually</span>
-                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold transition-colors ${isAnnual ? "bg-black/10 text-black" : "bg-green-500/20 text-green-400"
-                                            }`}>
-                                            -30%
-                                        </span>
-                                    </div>
-                                </button>
-
-                                {/* Sliding Background */}
+                            <span
+                                className={`text-sm font-medium cursor-pointer transition-colors ${!isAnnual ? 'text-white' : 'text-zinc-500'}`}
+                                onClick={() => setIsAnnual(false)}
+                            >
+                                Monthly
+                            </span>
+                            <button
+                                onClick={() => setIsAnnual(!isAnnual)}
+                                className="w-14 h-8 bg-zinc-800 rounded-full p-1 relative transition-colors hover:bg-zinc-700 focus:outline-none"
+                            >
                                 <motion.div
-                                    className="absolute top-1 bottom-1 bg-green-500 rounded-full shadow-lg"
-                                    initial={false}
-                                    animate={{
-                                        left: isAnnual ? "50%" : "4px",
-                                        right: isAnnual ? "4px" : "50%"
-                                    }}
-                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                    className="w-6 h-6 bg-green-500 rounded-full shadow-lg"
+                                    animate={{ x: isAnnual ? 24 : 0 }}
+                                    transition={{ type: "spring", stiffness: 700, damping: 30 }}
                                 />
-                            </div>
+                            </button>
+                            <span
+                                className={`text-sm font-medium cursor-pointer transition-colors ${isAnnual ? 'text-white' : 'text-zinc-500'}`}
+                                onClick={() => setIsAnnual(true)}
+                            >
+                                Annually <span className="text-green-400 text-xs ml-1">(Save 30%)</span>
+                            </span>
                         </motion.div>
                     </div>
 
