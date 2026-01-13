@@ -23,11 +23,6 @@ body {
   height: 1em;
 }
 
-/* Float animation */
-.float-anim {
-  animation: float 6s ease-in-out infinite;
-}
-
 /* Paper Flip Animation - for background cards */
 @keyframes paperFlip1 {
 

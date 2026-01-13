@@ -38,6 +38,7 @@ export default function LandingPage() {
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
+        let timeoutId: NodeJS.Timeout | null = null;
 
         const type = () => {
             const currentWord = words[wordIndex];
@@ -51,17 +52,24 @@ export default function LandingPage() {
             }
 
             if (!isDeleting && charIndex === currentWord.length) {
-                setTimeout(() => { isDeleting = true; }, 2000);
+                timeoutId = setTimeout(() => { isDeleting = true; }, 2000);
             } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 wordIndex = (wordIndex + 1) % words.length;
             }
 
             const speed = isDeleting ? 50 : 100;
-            setTimeout(type, speed);
+            timeoutId = setTimeout(type, speed);
         };
 
         type();
+
+        // Cleanup function to prevent memory leaks
+        return () => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+        };
     }, []);
 
     // Note cycling effect with enter/exit animation
