@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-import { User } from "@supabase/supabase-js";
+import { useState } from "react";
+import { useAuth } from "@/lib/auth-context";
 import { LogOut, User as UserIcon, ChevronDown } from "lucide-react";
 import Link from "next/link";
 
@@ -11,32 +10,12 @@ interface UserProfileButtonProps {
 }
 
 export function UserProfileButton({ variant = "dark" }: UserProfileButtonProps) {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const { user, loading, signOut } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
 
-    useEffect(() => {
-        const supabase = createClient();
-
-        // Get initial user
-        supabase.auth.getUser().then(({ data: { user } }) => {
-            setUser(user);
-            setLoading(false);
-        });
-
-        // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
-        });
-
-        return () => subscription.unsubscribe();
-    }, []);
-
     const handleLogout = async () => {
-        const supabase = createClient();
-        await supabase.auth.signOut({ scope: 'global' });
         setShowDropdown(false);
-        window.location.href = "/";
+        await signOut();
     };
 
     // Loading state
