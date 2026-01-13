@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Users, BookOpen, Lock, Globe, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -228,6 +229,3 @@ export function CreateGroupModal({ isOpen, onClose, onCreate }: CreateGroupModal
         </div>
     );
 }
-
-// Need to import useState for CreateGroupModal
-import { useState } from "react";
