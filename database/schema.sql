@@ -44,11 +44,28 @@ CREATE TABLE IF NOT EXISTS purchases (
   UNIQUE(buyer_id, note_id) -- Prevent duplicate purchases
 );
 
+-- Educator Applications table (for admin approval flow)
+CREATE TABLE IF NOT EXISTS educator_applications (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  reason TEXT NOT NULL, -- Why they want to be an educator
+  institution TEXT, -- University/School name
+  proof_url TEXT, -- Optional: link to credentials/proof
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+  admin_notes TEXT, -- Notes from admin review
+  reviewed_by UUID REFERENCES auth.users(id),
+  reviewed_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(user_id, status) -- One pending application per user
+);
+
 -- Create indexes for performance
 CREATE INDEX IF NOT EXISTS idx_notes_seller ON notes(seller_id);
 CREATE INDEX IF NOT EXISTS idx_notes_status ON notes(status);
 CREATE INDEX IF NOT EXISTS idx_purchases_buyer ON purchases(buyer_id);
 CREATE INDEX IF NOT EXISTS idx_purchases_note ON purchases(note_id);
+CREATE INDEX IF NOT EXISTS idx_educator_apps_status ON educator_applications(status);
+CREATE INDEX IF NOT EXISTS idx_educator_apps_user ON educator_applications(user_id);
 
 -- Enable Row Level Security
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
@@ -69,6 +86,23 @@ CREATE POLICY "Users can delete own notes" ON notes FOR DELETE USING (auth.uid()
 -- Purchases policies
 CREATE POLICY "Users can view own purchases" ON purchases FOR SELECT USING (auth.uid() = buyer_id);
 CREATE POLICY "Users can insert purchases" ON purchases FOR INSERT WITH CHECK (auth.uid() = buyer_id);
+
+-- Educator Applications: Enable RLS
+ALTER TABLE educator_applications ENABLE ROW LEVEL SECURITY;
+
+-- Educator Applications policies
+CREATE POLICY "Users can view own applications" ON educator_applications FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can submit applications" ON educator_applications FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Admins can view all applications" ON educator_applications FOR SELECT USING (
+    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+);
+CREATE POLICY "Admins can update applications" ON educator_applications FOR UPDATE USING (
+    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+);
+-- Allow admins to update profiles (for role changes)
+CREATE POLICY "Admins can update any profile" ON profiles FOR UPDATE USING (
+    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
+);
 
 -- Function to auto-create profile on signup
 CREATE OR REPLACE FUNCTION handle_new_user()
