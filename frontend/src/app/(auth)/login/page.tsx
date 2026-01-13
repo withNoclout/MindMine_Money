@@ -15,10 +15,14 @@ export default function LoginPage() {
         setIsLoading(true);
         const supabase = createClient();
 
+        // Detect which mode we're in (student or educator)
+        const isStudentMode = document.body.classList.contains('is-student-mode');
+        const role = isStudentMode ? 'student' : 'educator';
+
         const { error } = await supabase.auth.signInWithOAuth({
             provider,
             options: {
-                redirectTo: `${window.location.origin}/auth/callback?next=/`,
+                redirectTo: `${window.location.origin}/auth/callback?next=/&role=${role}`,
                 queryParams: {
                     prompt: 'select_account', // Force account picker on each login
                 },
