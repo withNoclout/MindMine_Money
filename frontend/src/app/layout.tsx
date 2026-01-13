@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 import { PageLoader } from "@/components/ui/PageLoader";
 import { AuthProvider } from "@/lib/auth-context";
+import { SessionProvider } from "@/providers/SessionProvider";
 
 export default function RootLayout({
   children,
@@ -25,9 +26,12 @@ export default function RootLayout({
       <body className="antialiased selection:bg-zinc-800 selection:text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
         <PageLoader />
         <AuthProvider>
-          {children}
+          <SessionProvider>
+            {children}
+          </SessionProvider>
         </AuthProvider>
       </body>
     </html>
   );
 }
+

@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { AuthChangeEvent, Session, User } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 
@@ -23,6 +24,7 @@ interface AuthContextType {
     isEducator: boolean;
     isStudent: boolean;
     isAdmin: boolean;
+    signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -34,13 +36,24 @@ const AuthContext = createContext<AuthContextType>({
     isEducator: false,
     isStudent: false,
     isAdmin: false,
+    signOut: async () => { },
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+    const router = useRouter();
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Global signOut function
+    const signOut = useCallback(async () => {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+        setUser(null);
+        setProfile(null);
+        router.push('/login');
+    }, [router]);
 
     // Fetch user profile with role
     const fetchProfile = async (userId: string) => {
@@ -112,6 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             isEducator: role === 'educator' || role === 'admin',
             isStudent: role === 'student',
             isAdmin: role === 'admin',
+            signOut,
         }}>
             {children}
         </AuthContext.Provider>
