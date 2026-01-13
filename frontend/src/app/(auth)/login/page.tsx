@@ -39,13 +39,9 @@ export default function LoginPage() {
         // Expose OAuth handler to the injected HTML buttons
         (window as any).handleOAuthLogin = handleOAuthLogin;
 
-        // Define the toggleMode function on window for the onclick handlers
-        (window as any).toggleMode = function () {
+        // Helper function to apply mode visually
+        const applyMode = (isStudentMode: boolean) => {
             const body = document.body;
-            const isStudent = body.classList.contains('is-student-mode');
-
-            body.classList.toggle('is-student-mode');
-
             const eduForm = document.getElementById('educator-form');
             const stuForm = document.getElementById('student-form');
             const eduVis = document.getElementById('educator-visual');
@@ -53,7 +49,8 @@ export default function LoginPage() {
             const eduBg = document.getElementById('edu-bg');
             const stuBg = document.getElementById('stu-bg');
 
-            if (!isStudent) {
+            if (isStudentMode) {
+                body.classList.add('is-student-mode');
                 eduForm?.classList.remove('active');
                 eduVis?.classList.remove('active');
                 if (eduBg) eduBg.style.opacity = '0';
@@ -61,6 +58,7 @@ export default function LoginPage() {
                 stuVis?.classList.add('active');
                 if (stuBg) stuBg.style.opacity = '1';
             } else {
+                body.classList.remove('is-student-mode');
                 stuForm?.classList.remove('active');
                 stuVis?.classList.remove('active');
                 if (stuBg) stuBg.style.opacity = '0';
@@ -68,6 +66,26 @@ export default function LoginPage() {
                 eduVis?.classList.add('active');
                 if (eduBg) eduBg.style.opacity = '1';
             }
+        };
+
+        // Restore mode from localStorage on page load
+        const savedMode = localStorage.getItem('mindmine_login_mode');
+        if (savedMode === 'student') {
+            // Delay slightly to ensure DOM is ready
+            setTimeout(() => applyMode(true), 50);
+        }
+
+        // Define the toggleMode function on window for the onclick handlers
+        (window as any).toggleMode = function () {
+            const body = document.body;
+            const isStudent = body.classList.contains('is-student-mode');
+            const newMode = !isStudent;
+
+            // Save to localStorage
+            localStorage.setItem('mindmine_login_mode', newMode ? 'student' : 'educator');
+
+            // Apply the mode
+            applyMode(newMode);
         };
 
         // Mock Login Handler (for email/password - to be replaced with real Supabase auth later)
