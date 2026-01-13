@@ -17,13 +17,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Patrick+Hand&display=swap" rel="stylesheet" />
       </head>
-      <body className="antialiased selection:bg-zinc-800 selection:text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <body className="antialiased selection:bg-zinc-800 selection:text-white" style={{ fontFamily: "'Inter', sans-serif" }} suppressHydrationWarning>
         <PageLoader />
         <AuthProvider>
           <SessionProvider>
