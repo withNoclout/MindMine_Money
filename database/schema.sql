@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   display_name TEXT,
   avatar_url TEXT,
+  role TEXT DEFAULT 'student' CHECK (role IN ('student', 'educator', 'admin')),
   total_earnings DECIMAL(10,2) DEFAULT 0,
   stripe_account_id TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),

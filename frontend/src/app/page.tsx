@@ -288,6 +288,82 @@ export default function LandingPage() {
                         </div>
                     </section>
 
+                    {/* Discussion Board Section */}
+                    <section id="discussions" className="max-w-6xl mx-auto px-6 py-24">
+                        <div className="text-center mb-12">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-xs text-zinc-400 font-medium mb-4">
+                                <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                                Community Powered
+                            </div>
+                            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight mb-4">
+                                Learn <span className="text-zinc-500">together</span>, grow <span className="text-green-500">faster</span>
+                            </h2>
+                            <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+                                Join study groups, ask questions, and collaborate with students from universities worldwide.
+                            </p>
+                        </div>
+
+                        {/* Discussion Preview Cards */}
+                        <div className="grid md:grid-cols-3 gap-6 mb-12">
+                            {/* Study Group Card */}
+                            <div className="group p-6 rounded-2xl border border-white/5 bg-zinc-900/50 hover:bg-zinc-900 transition-all hover:border-green-500/30 cursor-pointer">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="flex -space-x-2">
+                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center text-black text-xs font-bold ring-2 ring-zinc-900">A</div>
+                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-cyan-600 flex items-center justify-center text-black text-xs font-bold ring-2 ring-zinc-900">B</div>
+                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-black text-xs font-bold ring-2 ring-zinc-900">C</div>
+                                        <div className="w-8 h-8 rounded-full bg-zinc-700 flex items-center justify-center text-white text-xs font-medium ring-2 ring-zinc-900">+12</div>
+                                    </div>
+                                </div>
+                                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-green-400 transition-colors">ECON 101 Study Squad</h3>
+                                <p className="text-sm text-zinc-500 mb-4">Harvard University • 24 members</p>
+                                <div className="flex items-center gap-2 text-xs text-zinc-400">
+                                    <span className="px-2 py-1 rounded-full bg-green-500/10 text-green-400">Active now</span>
+                                    <span>15 notes shared</span>
+                                </div>
+                            </div>
+
+                            {/* Discussion Thread Card */}
+                            <div className="group p-6 rounded-2xl border border-white/5 bg-zinc-900/50 hover:bg-zinc-900 transition-all hover:border-blue-500/30 cursor-pointer">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <span className="text-xs font-medium text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full">Question</span>
+                                    <span className="text-xs text-zinc-500">2 hours ago</span>
+                                </div>
+                                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">How to solve integration by parts?</h3>
+                                <p className="text-sm text-zinc-500 mb-4 line-clamp-2">I&apos;m stuck on problem 5.3 in the calculus notes. Can someone explain the u-substitution step?</p>
+                                <div className="flex items-center gap-4 text-xs text-zinc-400">
+                                    <span>👍 12</span>
+                                    <span>💬 8 replies</span>
+                                </div>
+                            </div>
+
+                            {/* Peer Review Card */}
+                            <div className="group p-6 rounded-2xl border border-white/5 bg-zinc-900/50 hover:bg-zinc-900 transition-all hover:border-yellow-500/30 cursor-pointer">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <div className="flex items-center text-yellow-400">
+                                        {[1, 2, 3, 4, 5].map((s) => (
+                                            <Star key={s} className={`w-4 h-4 ${s <= 4 ? 'fill-yellow-400' : ''}`} />
+                                        ))}
+                                    </div>
+                                    <span className="text-xs text-zinc-500">4.8 avg</span>
+                                </div>
+                                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-yellow-400 transition-colors">&quot;Best notes I&apos;ve ever bought!&quot;</h3>
+                                <p className="text-sm text-zinc-500 mb-4 line-clamp-2">Clear diagrams, well-organized, and the seller even answered my questions. Highly recommend!</p>
+                                <div className="flex items-center gap-2 text-xs text-zinc-400">
+                                    <span className="text-green-400">✓ Verified Purchase</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* CTA */}
+                        <div className="text-center">
+                            <Link href="/groups" className="group inline-flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 text-white font-medium rounded-xl hover:bg-white/10 transition-all">
+                                Join the Discussion
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </div>
+                    </section>
+
                     {/* CTA Section */}
                     <section className="max-w-6xl mx-auto px-6 py-20">
                         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-zinc-900 to-zinc-950 p-12 md:p-16">
