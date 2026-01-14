@@ -102,7 +102,7 @@ export default function AdminApplicationsPage() {
 
     return (
         <AdminOnly>
-            <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
             <Navbar />
             <PageTransition>
                 <div className="min-h-screen bg-black pt-24 pb-12">
@@ -150,10 +150,10 @@ export default function AdminApplicationsPage() {
                                     <div
                                         key={app.id}
                                         className={`p-6 rounded-xl border ${app.status === 'pending'
-                                                ? 'bg-zinc-900/50 border-white/10'
-                                                : app.status === 'approved'
-                                                    ? 'bg-green-500/5 border-green-500/20'
-                                                    : 'bg-red-500/5 border-red-500/20'
+                                            ? 'bg-zinc-900/50 border-white/10'
+                                            : app.status === 'approved'
+                                                ? 'bg-green-500/5 border-green-500/20'
+                                                : 'bg-red-500/5 border-red-500/20'
                                             }`}
                                     >
                                         {/* Applicant Info */}
@@ -181,8 +181,8 @@ export default function AdminApplicationsPage() {
 
                                             {app.status !== 'pending' && (
                                                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${app.status === 'approved'
-                                                        ? 'bg-green-500/10 text-green-400'
-                                                        : 'bg-red-500/10 text-red-400'
+                                                    ? 'bg-green-500/10 text-green-400'
+                                                    : 'bg-red-500/10 text-red-400'
                                                     }`}>
                                                     {app.status.charAt(0).toUpperCase() + app.status.slice(1)}
                                                 </span>

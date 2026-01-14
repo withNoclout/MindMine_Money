@@ -44,21 +44,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // Global signOut function with error handling
+    // Global signOut function with comprehensive cleanup
     const signOut = useCallback(async () => {
+        // Clear local state immediately
+        setUser(null);
+        setProfile(null);
+        setError(null);
+
+        // Clear any cached auth data from localStorage immediately
+        if (typeof window !== 'undefined') {
+            const keysToRemove = Object.keys(localStorage).filter(key =>
+                key.startsWith('sb-') || key.includes('supabase')
+            );
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+
+            // Schedule redirect IMMEDIATELY - this will fire no matter what
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 500); // Small delay to let localStorage clear
+        }
+
+        // Fire-and-forget: try to sign out from Supabase but don't wait for it
         try {
             const supabase = createClient();
-            await supabase.auth.signOut();
+            supabase.auth.signOut({ scope: 'global' }).catch(console.error);
         } catch (error) {
-            console.error('SignOut error:', error);
-            // Continue with cleanup even if Supabase call fails
-        } finally {
-            // Always clear local state and redirect
-            setUser(null);
-            setProfile(null);
-            setError(null);
-            // Use window.location for hard redirect to ensure clean state
-            window.location.href = '/login';
+            console.error('Supabase signOut error:', error);
         }
     }, []);
 
@@ -82,63 +93,104 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         const supabase = createClient();
         let isMounted = true;
+        let retryCount = 0;
+        const MAX_RETRIES = 3;
 
-        // Get initial user and profile
-        const initAuth = async () => {
+        // Get initial user and profile with retry logic
+        const initAuth = async (): Promise<void> => {
             try {
-                const { data: { user: fetchedUser } } = await supabase.auth.getUser();
+                // Use getSession which is more reliable than getUser
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-                // Only update state if component is still mounted
+                if (sessionError) {
+                    throw sessionError;
+                }
+
                 if (!isMounted) return;
 
-                setUser(fetchedUser);
-                if (fetchedUser) {
-                    const userProfile = await fetchProfile(fetchedUser.id);
+                if (session?.user) {
+                    setUser(session.user);
+                    const userProfile = await fetchProfile(session.user.id);
                     if (isMounted) {
                         setProfile(userProfile);
+                        setError(null);
                     }
+                } else {
+                    setUser(null);
+                    setProfile(null);
                 }
+
                 if (isMounted) {
-                    setError(null);
+                    setLoading(false);
                 }
             } catch (err: unknown) {
-                // Ignore AbortError - this happens during React's strict mode or fast unmounts
+                // Retry on AbortError (common with React StrictMode)
                 if (err instanceof Error && err.name === 'AbortError') {
+                    if (retryCount < MAX_RETRIES) {
+                        retryCount++;
+                        console.log(`Auth retry ${retryCount}/${MAX_RETRIES}...`);
+                        setTimeout(() => {
+                            if (isMounted) initAuth();
+                        }, 500 * retryCount); // Exponential backoff
+                        return;
+                    }
+                    // Max retries reached, just set loading to false
+                    console.warn('Auth initialization failed after retries');
+                    if (isMounted) setLoading(false);
                     return;
                 }
+
                 console.error('Auth error:', err);
                 if (isMounted) {
                     setError('Failed to load user session');
                     setUser(null);
                     setProfile(null);
-                }
-            } finally {
-                if (isMounted) {
                     setLoading(false);
                 }
             }
         };
 
+        // Start auth initialization
         initAuth();
 
-        // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
-            if (!isMounted) return;
+        // Listen for auth changes - this handles login/logout events
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            async (event: AuthChangeEvent, session: Session | null) => {
+                if (!isMounted) return;
 
-            if (session) {
-                setUser(session.user);
-                const userProfile = await fetchProfile(session.user.id);
-                if (isMounted) {
-                    setProfile(userProfile);
+                console.log('Auth state changed:', event, session?.user?.email);
+
+                // Handle specific events
+                if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                    if (session?.user) {
+                        setUser(session.user);
+                        setLoading(true); // Show loading while fetching profile
+                        const userProfile = await fetchProfile(session.user.id);
+                        if (isMounted) {
+                            setProfile(userProfile);
+                            setError(null);
+                            setLoading(false);
+                        }
+                    }
+                } else if (event === 'SIGNED_OUT') {
+                    setUser(null);
+                    setProfile(null);
                     setError(null);
+                    setLoading(false);
+                } else if (event === 'INITIAL_SESSION') {
+                    // Initial session event - update state if we have a session
+                    if (session?.user) {
+                        setUser(session.user);
+                        const userProfile = await fetchProfile(session.user.id);
+                        if (isMounted) {
+                            setProfile(userProfile);
+                            setError(null);
+                        }
+                    }
+                    setLoading(false);
                 }
-            } else {
-                setUser(null);
-                setProfile(null);
-                setError(null);
             }
-            setLoading(false);
-        });
+        );
 
         return () => {
             isMounted = false;

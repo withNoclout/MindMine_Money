@@ -60,15 +60,15 @@ export function CommentCard({
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`py-4 ${depth === 0 ? 'border-b border-white/5' : ''}`}
+                className={`py-4 group ${depth === 0 ? 'border-b border-white/5' : ''}`}
             >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                         {/* Avatar */}
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${author.isSeller
-                                ? 'bg-gradient-to-br from-green-400 to-emerald-600 text-black'
-                                : 'bg-zinc-700 text-white'
+                            ? 'bg-gradient-to-br from-green-400 to-emerald-600 text-black'
+                            : 'bg-zinc-700 text-white'
                             }`}>
                             {author.avatar ? (
                                 <img src={author.avatar} alt={author.name} className="w-full h-full rounded-full object-cover" />
@@ -80,9 +80,9 @@ export function CommentCard({
                             <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium text-white">{author.name}</span>
                                 {author.isSeller && (
-                                    <span className="flex items-center gap-1 text-[10px] text-green-400 bg-green-500/10 px-1.5 py-0.5 rounded-full font-medium">
-                                        <CheckCircle2 className="w-2.5 h-2.5" />
-                                        Seller
+                                    <span className="flex items-center gap-1 text-[10px] text-zinc-950 bg-gradient-to-r from-green-400 to-emerald-500 px-2 py-0.5 rounded-full font-bold shadow-[0_0_12px_rgba(34,197,94,0.3)]">
+                                        <CheckCircle2 className="w-3 h-3" strokeWidth={3} />
+                                        SELLER
                                     </span>
                                 )}
                             </div>
@@ -105,8 +105,8 @@ export function CommentCard({
                             whileTap={{ scale: 0.9 }}
                             onClick={() => handleVote('up')}
                             className={`p-1.5 rounded-lg transition-colors cursor-pointer ${vote === 'up'
-                                    ? 'bg-green-500/20 text-green-400'
-                                    : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'
+                                ? 'bg-green-500/20 text-green-400'
+                                : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'
                                 }`}
                         >
                             <ThumbsUp className="w-4 h-4" />
@@ -116,8 +116,8 @@ export function CommentCard({
                             whileTap={{ scale: 0.9 }}
                             onClick={() => handleVote('down')}
                             className={`p-1.5 rounded-lg transition-colors cursor-pointer ${vote === 'down'
-                                    ? 'bg-red-500/20 text-red-400'
-                                    : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'
+                                ? 'bg-red-500/20 text-red-400'
+                                : 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'
                                 }`}
                         >
                             <ThumbsDown className="w-4 h-4" />
@@ -134,7 +134,7 @@ export function CommentCard({
                         </button>
                     )}
 
-                    <button className="flex items-center gap-1 text-xs text-zinc-500 hover:text-red-400 transition-colors cursor-pointer">
+                    <button className="flex items-center gap-1 text-xs text-zinc-600 hover:text-red-400 transition-colors cursor-pointer opacity-0 group-hover:opacity-100 focus:opacity-100">
                         <Flag className="w-3.5 h-3.5" />
                         Report
                     </button>

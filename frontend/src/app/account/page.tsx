@@ -61,7 +61,7 @@ export default function AccountPage() {
     if (loading) {
         return (
             <>
-                <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
                 <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
                     <Loader2 className="w-8 h-8 text-zinc-500 animate-spin" />
                 </div>
@@ -71,7 +71,7 @@ export default function AccountPage() {
 
     return (
         <>
-            <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
 
             <div className="min-h-screen bg-[#09090b]">
                 <div className="fixed inset-0 bg-grid-pattern z-0 pointer-events-none" />
@@ -93,8 +93,8 @@ export default function AccountPage() {
                                     key={tab}
                                     onClick={() => setActiveTab(tab)}
                                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeTab === tab
-                                            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                                            : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                                        ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                        : 'text-zinc-400 hover:text-white hover:bg-white/5'
                                         }`}
                                 >
                                     {tab === 'purchases' && <ShoppingBag className="w-4 h-4 inline mr-2" />}

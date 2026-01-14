@@ -56,7 +56,7 @@ export default function StudioPage() {
     return (
         <EducatorOnly>
             <>
-                <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
 
                 <div className="min-h-screen bg-[#09090b]">
                     {/* Background Grid */}

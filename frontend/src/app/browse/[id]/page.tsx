@@ -88,7 +88,7 @@ export default function NoteDetailPage() {
     if (loading) {
         return (
             <>
-                <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
                 <div className="min-h-screen bg-[#09090b] flex items-center justify-center">
                     <Loader2 className="w-8 h-8 text-zinc-500 animate-spin" />
                 </div>
@@ -99,7 +99,7 @@ export default function NoteDetailPage() {
     if (!note) {
         return (
             <>
-                <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
                 <div className="min-h-screen bg-[#09090b]">
                     <Navbar />
                     <main className="pt-24 px-6">
@@ -121,7 +121,7 @@ export default function NoteDetailPage() {
 
     return (
         <>
-            <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
 
             <div className="min-h-screen bg-[#09090b] overflow-x-hidden">
                 <div className="fixed inset-0 bg-grid-pattern z-0 pointer-events-none" />

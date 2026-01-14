@@ -92,7 +92,7 @@ export default function LandingPage() {
 
     return (
         <>
-            <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
 
             <div className="min-h-screen bg-[#09090b] text-white">
                 {/* Background Grid */}

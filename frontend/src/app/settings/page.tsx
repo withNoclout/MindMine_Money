@@ -88,7 +88,7 @@ export default function SettingsPage() {
 
     return (
         <>
-            <Script src="https://cdn.tailwindcss.com" strategy="beforeInteractive" />
+
             <Navbar />
             <PageTransition>
                 <div className="min-h-screen bg-black pt-24 pb-12">
@@ -110,8 +110,8 @@ export default function SettingsPage() {
                                 <h1 className="text-2xl font-semibold text-white">{displayName}</h1>
                                 <div className="flex items-center gap-2 text-zinc-400 mt-1">
                                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${role === 'educator' ? 'bg-green-500/10 text-green-400' :
-                                            role === 'admin' ? 'bg-purple-500/10 text-purple-400' :
-                                                'bg-blue-500/10 text-blue-400'
+                                        role === 'admin' ? 'bg-purple-500/10 text-purple-400' :
+                                            'bg-blue-500/10 text-blue-400'
                                         }`}>
                                         {role === 'educator' ? 'Educator' : role === 'admin' ? 'Admin' : 'Student'}
                                     </span>

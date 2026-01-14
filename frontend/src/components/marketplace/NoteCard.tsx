@@ -29,7 +29,7 @@ export function NoteCard({
     seller,
 }: NoteCardProps) {
     return (
-        <Link href={`/browse/${id}`} className="group relative bg-zinc-900/50 border border-white/5 rounded-2xl overflow-hidden transition-all duration-300 hover:border-white/10 hover:shadow-[0_0_60px_rgba(34,197,94,0.1)] block">
+        <Link href={`/browse/${id}`} className="group relative bg-zinc-900/40 backdrop-blur-md border border-white/5 rounded-2xl overflow-hidden transition-all duration-500 hover:bg-zinc-900/60 hover:border-green-500/30 hover:shadow-[0_0_40px_rgba(34,197,94,0.15)] hover:-translate-y-1 block">
             {/* Thumbnail */}
             <div className="relative aspect-[4/3] bg-zinc-800 overflow-hidden">
                 {thumbnailUrl ? (

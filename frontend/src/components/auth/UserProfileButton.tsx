@@ -12,16 +12,28 @@ interface UserProfileButtonProps {
 export function UserProfileButton({ variant = "dark" }: UserProfileButtonProps) {
     const { user, loading, signOut } = useAuth();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
 
     const handleLogout = async () => {
+        setIsLoggingOut(true);
         setShowDropdown(false);
-        await signOut();
+
+        try {
+            await signOut();
+        } catch (error) {
+            console.error('Logout failed:', error);
+            // Force redirect even if signOut fails
+            window.location.href = '/login';
+        }
     };
 
     // Loading state
-    if (loading) {
+    if (loading || isLoggingOut) {
+        // console.log("UserProfileButton: Loading state active"); // Debug log
         return (
-            <div className="w-20 h-9 rounded-full bg-zinc-800 animate-pulse" />
+            <div className="w-[100px] h-[32px] rounded-full bg-zinc-800/50 animate-pulse border border-zinc-700/50 flex items-center justify-center">
+                {isLoggingOut && <span className="text-xs text-zinc-500">Signing out...</span>}
+            </div>
         );
     }
 
