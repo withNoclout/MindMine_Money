@@ -81,24 +81,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         const supabase = createClient();
+        let isMounted = true;
 
         // Get initial user and profile
         const initAuth = async () => {
             try {
                 const { data: { user: fetchedUser } } = await supabase.auth.getUser();
+
+                // Only update state if component is still mounted
+                if (!isMounted) return;
+
                 setUser(fetchedUser);
                 if (fetchedUser) {
                     const userProfile = await fetchProfile(fetchedUser.id);
-                    setProfile(userProfile);
+                    if (isMounted) {
+                        setProfile(userProfile);
+                    }
                 }
-                setError(null);
-            } catch (err) {
+                if (isMounted) {
+                    setError(null);
+                }
+            } catch (err: unknown) {
+                // Ignore AbortError - this happens during React's strict mode or fast unmounts
+                if (err instanceof Error && err.name === 'AbortError') {
+                    return;
+                }
                 console.error('Auth error:', err);
-                setError('Failed to load user session');
-                setUser(null);
-                setProfile(null);
+                if (isMounted) {
+                    setError('Failed to load user session');
+                    setUser(null);
+                    setProfile(null);
+                }
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
 
@@ -106,11 +123,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
+            if (!isMounted) return;
+
             if (session) {
                 setUser(session.user);
                 const userProfile = await fetchProfile(session.user.id);
-                setProfile(userProfile);
-                setError(null);
+                if (isMounted) {
+                    setProfile(userProfile);
+                    setError(null);
+                }
             } else {
                 setUser(null);
                 setProfile(null);
@@ -119,7 +140,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setLoading(false);
         });
 
-        return () => subscription.unsubscribe();
+        return () => {
+            isMounted = false;
+            subscription.unsubscribe();
+        };
     }, []);
 
     const role = profile?.role || null;
