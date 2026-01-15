@@ -39,9 +39,15 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(() => {
+        if (typeof window !== 'undefined') {
+            const stored = localStorage.getItem('sb-user');
+            return stored ? JSON.parse(stored) : null;
+        }
+        return null;
+    });
+    const [loading, setLoading] = useState<boolean>(!user);
     const [profile, setProfile] = useState<UserProfile | null>(null);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     // Global signOut function with comprehensive cleanup
@@ -150,9 +156,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
         };
 
+        // If user already loaded from localStorage, skip async init
+        if (user) {
+            setLoading(false);
+            return;
+        }
         // Start auth initialization
         initAuth();
-
         // Listen for auth changes - this handles login/logout events
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (event: AuthChangeEvent, session: Session | null) => {

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import UserInformation from '@/components/UserInformation';
 import { Menu, X } from 'lucide-react';
 
 export default function Header() {
@@ -26,9 +27,8 @@ export default function Header() {
 
   return (
     <motion.header
-      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-gray-200 transition-all duration-300 ${
-        scrolled ? 'bg-white/95 shadow-sm' : 'bg-white/80'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-gray-200 transition-all duration-300 ${scrolled ? 'bg-white/95 shadow-sm' : 'bg-white/80'
+        }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -103,6 +103,7 @@ export default function Header() {
             >
               Become Educator
             </motion.a>
+            <UserInformation />
           </div>
 
           {/* Mobile menu button */}
@@ -123,57 +124,57 @@ export default function Header() {
               initial={{ x: '100%', opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '100%', opacity: 0 }}
-              transition={{ 
+              transition={{
                 type: 'spring',
                 damping: 25,
                 stiffness: 300
               }}
               className="md:hidden py-4 space-y-4 border-t border-gray-200 bg-white"
             >
-            <button
-              onClick={() => scrollToSection('how-it-works')}
-              className="block w-full text-left text-sm font-medium text-gray-600 hover:text-black py-2"
-            >
-              How It Works
-            </button>
-            <button
-              onClick={() => scrollToSection('educators')}
-              className="block w-full text-left text-sm font-medium text-gray-600 hover:text-black py-2"
-            >
-              For Educators
-            </button>
-            <button
-              onClick={() => scrollToSection('students')}
-              className="block w-full text-left text-sm font-medium text-gray-600 hover:text-black py-2"
-            >
-              For Students
-            </button>
-            <button
-              onClick={() => scrollToSection('technology')}
-              className="block w-full text-left text-sm font-medium text-gray-600 hover:text-black py-2"
-            >
-              Technology
-            </button>
-            <div className="pt-4 space-y-3">
-              <motion.a
-                href="#student"
-                className="block w-full px-6 py-3 text-center text-sm font-semibold text-black border-2 border-black rounded"
-                whileHover={{ scale: 1.02, backgroundColor: "rgba(0, 0, 0, 0.05)" }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+              <button
+                onClick={() => scrollToSection('how-it-works')}
+                className="block w-full text-left text-sm font-medium text-gray-600 hover:text-black py-2"
               >
-                Get Started
-              </motion.a>
-              <motion.a
-                href="#educator"
-                className="block w-full px-6 py-3 text-center text-sm font-semibold bg-black text-white rounded"
-                whileHover={{ scale: 1.02, backgroundColor: "#262626" }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                How It Works
+              </button>
+              <button
+                onClick={() => scrollToSection('educators')}
+                className="block w-full text-left text-sm font-medium text-gray-600 hover:text-black py-2"
               >
-                Become Educator
-              </motion.a>
-            </div>
+                For Educators
+              </button>
+              <button
+                onClick={() => scrollToSection('students')}
+                className="block w-full text-left text-sm font-medium text-gray-600 hover:text-black py-2"
+              >
+                For Students
+              </button>
+              <button
+                onClick={() => scrollToSection('technology')}
+                className="block w-full text-left text-sm font-medium text-gray-600 hover:text-black py-2"
+              >
+                Technology
+              </button>
+              <div className="pt-4 space-y-3">
+                <motion.a
+                  href="#student"
+                  className="block w-full px-6 py-3 text-center text-sm font-semibold text-black border-2 border-black rounded"
+                  whileHover={{ scale: 1.02, backgroundColor: "rgba(0, 0, 0, 0.05)" }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  Get Started
+                </motion.a>
+                <motion.a
+                  href="#educator"
+                  className="block w-full px-6 py-3 text-center text-sm font-semibold bg-black text-white rounded"
+                  whileHover={{ scale: 1.02, backgroundColor: "#262626" }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  Become Educator
+                </motion.a>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
