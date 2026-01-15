@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
     "test": "jest"
@@ -11,10 +11,12 @@
   "dependencies": {
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.90.1",
+    "@xenova/transformers": "^2.17.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.26.1",
     "lucide-react": "^0.562.0",
     "next": "16.1.1",
+    "pdfjs-dist": "^5.4.530",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-pdf": "^10.3.0",
