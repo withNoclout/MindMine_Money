@@ -26,7 +26,7 @@ interface AuthContextType {
     signOut: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
     user: null,
     profile: null,
     role: null,
@@ -156,13 +156,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
         };
 
-        // If user already loaded from localStorage, skip async init
+        // If user already loaded from localStorage, we don't need to block UI
+        // but we STILL need to verify session and set up listeners
         if (user) {
             setLoading(false);
-            return;
         }
-        // Start auth initialization
+
+        // Start auth initialization (verifies session in background)
         initAuth();
+
+        // Safety timeout to prevent stuck loading state
+        const safetyTimeout = setTimeout(() => {
+            if (isMounted) {
+                // Check current loading state via a ref would be better, but we can just force update if needed.
+                // However, we can't easily access the current 'loading' state value inside this closure 
+                // reliably if it changed unless we use a Ref or functional update. 
+                // But setLoading(false) is safe to call even if already false.
+                setLoading(prev => {
+                    if (prev) console.warn('Auth initialization timed out, forcing UI render');
+                    return false;
+                });
+            }
+        }, 5000);
+
         // Listen for auth changes - this handles login/logout events
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
             async (event: AuthChangeEvent, session: Session | null) => {
@@ -204,6 +220,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         return () => {
             isMounted = false;
+            clearTimeout(safetyTimeout);
             subscription.unsubscribe();
         };
     }, []);

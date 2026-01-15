@@ -20,6 +20,7 @@ export function UserProfileButton({ variant = "dark" }: UserProfileButtonProps) 
 
         try {
             await signOut();
+            window.location.href = '/login';
         } catch (error) {
             console.error('Logout failed:', error);
             // Force redirect even if signOut fails

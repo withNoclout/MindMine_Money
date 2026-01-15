@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import UserInformation from '@/components/UserInformation';
+import { UserProfileButton } from "@/components/auth/UserProfileButton";
 import { Menu, X } from 'lucide-react';
 
 export default function Header() {
@@ -103,7 +103,7 @@ export default function Header() {
             >
               Become Educator
             </motion.a>
-            <UserInformation />
+            <UserProfileButton variant="light" />
           </div>
 
           {/* Mobile menu button */}
